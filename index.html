@@ -113,7 +113,7 @@ function updateObstacles() {
     if (parseInt(obs.style.left) < -50) {
       obs.remove();
       obstacles.splice(i, 1);
-      score += 10;
+      score += 20;
       scoreText.innerText = "Score: " + score;
       if (score >= 300) createKeyBtn.disabled = false;
       if (score % 50 === 0) obstacleSpeed += 1;
