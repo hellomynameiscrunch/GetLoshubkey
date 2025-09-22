@@ -4,13 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>VelocityHandler Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;700&display=swap" rel="stylesheet">
 <style>
   html, body {
     margin: 0;
     padding: 0;
     height: 100%;
-    background-color: #D2B48C; /* 연한갈색 */
-    font-family: Arial, sans-serif;
+    background-color: #FFF1E6; /* 연한 배경 */
+    font-family: 'Baloo 2', cursive; /* 귀여운 폰트 */
     display: flex;
     flex-direction: column;
   }
@@ -21,13 +22,14 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    padding: 20px;
   }
 
   h2 {
-    font-size: 48px;
+    font-size: 42px;
     margin-bottom: 15px;
-    color: #fff;
-    text-shadow: 0 0 10px rgba(0,0,0,0.3);
+    color: #6B4C3B; /* 진한 H라색 느낌 */
+    text-shadow: 1px 1px 5px rgba(0,0,0,0.1);
   }
 
   p {
@@ -35,43 +37,42 @@
     max-width: 500px;
     text-align: center;
     margin-bottom: 25px;
+    color: #5A3E2B;
   }
 
   .download-btn {
     display: inline-block;
-    background: rgba(150,140,255,0.8);
+    background: #C19A6B; /* H라색 */
     color: #fff;
-    padding: 12px 25px;
-    border-radius: 10px;
+    padding: 10px 20px;
+    border-radius: 15px;
     font-size: 16px;
     text-decoration: none;
-    font-weight: bold;
-    transition: all 0.3s;
-    box-shadow: 0 0 15px rgba(150,140,255,0.6);
+    font-weight: 700;
     cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 5px 10px rgba(0,0,0,0.1);
   }
 
   .download-btn:disabled {
-    background: gray;
+    background: #D8C3A5;
     cursor: not-allowed;
     box-shadow: none;
   }
 
   .download-btn:hover:enabled {
-    background: rgba(200,190,255,0.9);
-    box-shadow: 0 0 25px rgba(200,190,255,0.8);
     transform: scale(1.05);
+    box-shadow: 0 8px 15px rgba(0,0,0,0.2);
   }
 
-  /* 하단 막대 */
   .bottom-bar {
     height: 70px;
-    background-color: #C19A6B; /* H라색 */
+    background-color: #D9B68C; /* H라색 연한 톤 */
     border-radius: 20px 20px 0 0;
     display: flex;
     justify-content: space-around;
     align-items: center;
-    box-shadow: 0 -2px 10px rgba(0,0,0,0.2);
+    box-shadow: 0 -3px 10px rgba(0,0,0,0.1);
   }
 
   .tab {
@@ -81,42 +82,55 @@
     color: #fff;
     cursor: pointer;
     padding: 10px 0;
-    transition: background 0.3s;
-  }
-
-  .tab.active {
-    background: rgba(255,255,255,0.2);
+    transition: all 0.3s;
     border-radius: 15px;
   }
 
-  /* 탭 컨텐츠 */
+  .tab.active {
+    background: #C19A6B;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  }
+
   .tab-content {
     display: none;
     flex-direction: column;
     align-items: center;
+    animation: fadeIn 0.3s ease;
   }
 
   .tab-content.active {
     display: flex;
   }
+
+  @keyframes fadeIn {
+    from {opacity:0; transform: translateY(10px);}
+    to {opacity:1; transform: translateY(0);}
+  }
+
+  input.key-input {
+    padding: 8px;
+    border-radius: 10px;
+    border: 1px solid #C19A6B;
+    width: 200px;
+    margin-bottom: 10px;
+    font-family: 'Baloo 2', cursive;
+  }
+
 </style>
 </head>
 <body>
 <main>
-  <!-- HUB 탭 내용 -->
   <div id="hubTab" class="tab-content active">
     <h2>VelocityHandler HUB</h2>
     <p>This hub can be used even in towers with all-kill anti-cheat without getting banned!</p>
     <button class="download-btn" onclick="copyScript()">Copy for script ⬇️</button>
   </div>
 
-  <!-- SCRIPT 탭 내용 -->
   <div id="scriptTab" class="tab-content">
     <h2>Script Section</h2>
     <p>Scripts will appear here.</p>
   </div>
 
-  <!-- KEY 탭 내용 -->
   <div id="keyTab" class="tab-content">
     <h2>Key Generator</h2>
     <input type="text" id="username" placeholder="Enter your Roblox username" class="key-input">
@@ -125,7 +139,6 @@
   </div>
 </main>
 
-<!-- 하단 탭 -->
 <div class="bottom-bar">
   <div class="tab active" onclick="openTab('hub')">HUB</div>
   <div class="tab" onclick="openTab('script')">SCRIPT</div>
@@ -157,10 +170,7 @@ x["HDD"](c)()`;
 
   function createKey() {
     const username = usernameInput.value.trim();
-    if(!username) {
-      alert("Please enter your username.");
-      return;
-    }
+    if(!username) { alert("Please enter your username."); return; }
     const nameLength = username.length;
     const digits = username.match(/\d/g) || [];
     const digitSum = digits.reduce((sum,d) => sum + parseInt(d), 0);
