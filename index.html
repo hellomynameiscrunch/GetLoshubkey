@@ -23,31 +23,24 @@
     align-items: center;
     justify-content: center;
     padding: 20px;
+    transition: all 0.3s;
   }
 
   h2 {
-    font-size: 42px;
+    font-size: 64px; /* 타이틀 크게 */
     margin-bottom: 15px;
-    color: #6B4C3B; /* 진한 H라색 느낌 */
+    color: #6B4C3B;
     text-shadow: 1px 1px 5px rgba(0,0,0,0.1);
-  }
-
-  p {
-    font-size: 16px;
-    max-width: 500px;
     text-align: center;
-    margin-bottom: 25px;
-    color: #5A3E2B;
   }
 
   .download-btn {
     display: inline-block;
-    background: #C19A6B; /* H라색 */
+    background: #C19A6B;
     color: #fff;
     padding: 10px 20px;
     border-radius: 15px;
     font-size: 16px;
-    text-decoration: none;
     font-weight: 700;
     cursor: pointer;
     transition: all 0.3s;
@@ -65,32 +58,40 @@
     box-shadow: 0 8px 15px rgba(0,0,0,0.2);
   }
 
-  .bottom-bar {
-    height: 70px;
-    background-color: #D9B68C; /* H라색 연한 톤 */
-    border-radius: 20px 20px 0 0;
+  /* 오른쪽 세로 탭 바 */
+  .side-bar {
+    position: fixed;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: #D9B68C;
+    border-radius: 20px;
     display: flex;
-    justify-content: space-around;
+    flex-direction: column;
     align-items: center;
-    box-shadow: 0 -3px 10px rgba(0,0,0,0.1);
+    padding: 10px 5px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    gap: 10px;
+    z-index: 100;
   }
 
-  .tab {
-    flex: 1;
+  .side-bar .tab {
+    width: 70px;
     text-align: center;
-    font-size: 18px;
+    font-size: 16px;
     color: #fff;
     cursor: pointer;
     padding: 10px 0;
-    transition: all 0.3s;
     border-radius: 15px;
+    transition: all 0.3s;
   }
 
-  .tab.active {
+  .side-bar .tab.active {
     background: #C19A6B;
     box-shadow: 0 4px 10px rgba(0,0,0,0.15);
   }
 
+  /* 탭 컨텐츠 */
   .tab-content {
     display: none;
     flex-direction: column;
@@ -114,23 +115,44 @@
     width: 200px;
     margin-bottom: 10px;
     font-family: 'Baloo 2', cursive;
+    font-size: 16px;
+  }
+
+  /* 영상 컨테이너 */
+  .video-container {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 20px;
+  }
+
+  iframe {
+    border-radius: 10px;
   }
 
 </style>
 </head>
 <body>
+
 <main>
+  <!-- HUB 탭 -->
   <div id="hubTab" class="tab-content active">
     <h2>VelocityHandler HUB</h2>
-    <p>This hub can be used even in towers with all-kill anti-cheat without getting banned!</p>
-    <button class="download-btn" onclick="copyScript()">Copy for script ⬇️</button>
+    <div class="video-container">
+      <iframe width="400" height="225" src="https://www.youtube.com/embed/NLl2vuQi42M" title="YouTube video 1" frameborder="0" allowfullscreen></iframe>
+      <iframe width="400" height="225" src="https://www.youtube.com/embed/x8CpV6ESlTo" title="YouTube video 2" frameborder="0" allowfullscreen></iframe>
+    </div>
+    <button class="download-btn" onclick="copyScript()" style="margin-top:20px;">Copy for script ⬇️</button>
   </div>
 
+  <!-- SCRIPT 탭 -->
   <div id="scriptTab" class="tab-content">
     <h2>Script Section</h2>
     <p>Scripts will appear here.</p>
   </div>
 
+  <!-- KEY 탭 -->
   <div id="keyTab" class="tab-content">
     <h2>Key Generator</h2>
     <input type="text" id="username" placeholder="Enter your Roblox username" class="key-input">
@@ -139,7 +161,8 @@
   </div>
 </main>
 
-<div class="bottom-bar">
+<!-- 오른쪽 세로 탭 바 -->
+<div class="side-bar">
   <div class="tab active" onclick="openTab('hub')">HUB</div>
   <div class="tab" onclick="openTab('script')">SCRIPT</div>
   <div class="tab" onclick="openTab('key')">KEY</div>
@@ -184,10 +207,10 @@ x["HDD"](c)()`;
     const tabs = ['hub','script','key'];
     tabs.forEach(t => {
       document.getElementById(t+'Tab').classList.remove('active');
-      document.querySelector(`.bottom-bar .tab:nth-child(${tabs.indexOf(t)+1})`).classList.remove('active');
+      document.querySelector(`.side-bar .tab:nth-child(${tabs.indexOf(t)+1})`).classList.remove('active');
     });
     document.getElementById(tabName+'Tab').classList.add('active');
-    document.querySelector(`.bottom-bar .tab:nth-child(${tabs.indexOf(tabName)+1})`).classList.add('active');
+    document.querySelector(`.side-bar .tab:nth-child(${tabs.indexOf(tabName)+1})`).classList.add('active');
   }
 </script>
 </body>
